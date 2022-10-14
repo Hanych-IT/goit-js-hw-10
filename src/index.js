@@ -2,7 +2,7 @@ import './css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import debounce from 'lodash.debounce';
 
-import { fetchCountries } from './js/fetchCountries.js';
+import { fetchCountries } from './js/fetchCountries';
 import { createMarkup } from './js/createMarkup';
 import { previewMarkup } from './js/createPreview';
 
@@ -24,13 +24,15 @@ function resultRender(array) {
   if (amount > 10) {
     Notify.info('Too many matches found. Please enter a more specific name');
   } else if (amount > 1 && amount <= 10) {
+    Notify.info(`Hooray! We found ${amount} countries.`);
     refs.countryInfo.innerHTML = '';
-    const countriesListMarkUp = previewMarkup(array);
-    refs.countryList.innerHTML = countriesListMarkUp;
+    const countriesListMarkup = previewMarkup(array);
+    refs.countryList.innerHTML = countriesListMarkup;
   } else if (amount === 1) {
+    Notify.success(`This is exactly what you were looking for!`);
     refs.countryList.innerHTML = '';
-    const countryMarkUp = createMarkup(array[0]);
-    refs.countryInfo.innerHTML = countryMarkUp;
+    const countryMarkup = createMarkup(array[0]);
+    refs.countryInfo.innerHTML = countryMarkup;
   }
 }
 
@@ -39,7 +41,7 @@ function catchError() {
   clearFields();
 }
 
-function onIputChange(evt) {
+function onInputChange(evt) {
   let value = evt.target.value.trim().toLowerCase();
   if (value) {
     fetchCountries(value).then(resultRender).catch(catchError);
@@ -48,4 +50,4 @@ function onIputChange(evt) {
   }
 }
 
-refs.input.addEventListener('input', debounce(onIputChange, DEBOUNCE_DELAY));
+refs.input.addEventListener('input', debounce(onInputChange, DEBOUNCE_DELAY));
