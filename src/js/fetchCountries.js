@@ -1,7 +1,7 @@
+const url = `https://restcountries.com/v3.1/name/`;
+const settings = `?fields=name,capital,population,flags,languages`;
 export function fetchCountries(name) {
-  const url = `https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,languages,flags`;
-
-  return fetch(url).then(response => {
+  return fetch(`${url}${name}${settings}`).then(response => {
     if (!response.ok) {
       throw new Error(response.status);
     }
