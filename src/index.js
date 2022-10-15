@@ -17,6 +17,11 @@ function clearMarkup() {
   refs.countryInfo.innerHTML = '';
 }
 
+function renderPrewiewMarkup(array) {
+  const markup = array.map(previewMarkup).join('');
+  refs.countryList.innerHTML = markup;
+}
+
 function resultRender(array) {
   let countries = array.length;
   clearMarkup();
@@ -24,9 +29,7 @@ function resultRender(array) {
     Notify.info('Too many matches found. Please enter a more specific name');
   } else if (countries > 1 && countries <= 10) {
     Notify.info(`Hooray! We found ${countries} countries.`);
-    refs.countryInfo.innerHTML = '';
-    const previesListMarkup = previewMarkup(array);
-    refs.countryList.innerHTML = previesListMarkup;
+    renderPrewiewMarkup(array);
   } else if (countries === 1) {
     Notify.success(`This is exactly what you were looking for!`);
     refs.countryList.innerHTML = '';
@@ -43,7 +46,7 @@ function catchError() {
 function onInputChange(evt) {
   evt.preventDefault;
   if (evt.target.value) {
-    fetchCountries(evt.target.value.trim())
+    fetchCountries(evt.target.value.trim().toLowerCase())
       .then(resultRender)
       .catch(catchError);
   }
