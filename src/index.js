@@ -17,39 +17,46 @@ function clearMarkup() {
   refs.countryInfo.innerHTML = '';
 }
 
+let inputValue = '';
+
 function renderPrewiewMarkup(array) {
   const markup = array.map(previewMarkup).join('');
   refs.countryList.innerHTML = markup;
 }
 
-function resultRender(array) {
-  let countries = array.length;
+function renderCountryMarkup(array) {
+  const markup = array.map(createMarkup).join('');
+  refs.countryInfo.innerHTML = markup;
+}
+
+function onInputChange(evt) {
   clearMarkup();
-  if (countries > 10) {
-    Notify.info('Too many matches found. Please enter a more specific name');
-  } else if (countries > 1 && countries <= 10) {
-    Notify.info(`Hooray! We found ${countries} countries.`);
-    renderPrewiewMarkup(array);
-  } else if (countries === 1) {
-    Notify.success(`This is exactly what you were looking for!`);
-    refs.countryList.innerHTML = '';
-    const countryMarkup = createMarkup(array[0]);
-    refs.countryInfo.innerHTML = countryMarkup;
+  inputValue = evt.target.value.trim().toLowerCase();
+
+  if (!inputValue) {
+    return;
   }
+  fetchCountries(inputValue)
+    .then(array => {
+      if (array.length > 10) {
+        Notify.info(
+          'Too many matches found. Please enter a more specific name'
+        );
+      } else if (array.length > 1 && array.length <= 10) {
+        Notify.info(`Hooray! We found ${array} countries.`);
+        renderPrewiewMarkup(array);
+      } else if (array.length === 1) {
+        Notify.success(`This is exactly what you were looking for!`);
+        renderCountryMarkup(array);
+      }
+    })
+    .catch(error => {
+      catchError(error);
+    });
 }
 
 function catchError() {
   Notify.failure('Oops, there is no country with that name');
-  clearMarkup();
-}
-
-function onInputChange(evt) {
-  evt.preventDefault;
-  if (evt.target.value) {
-    fetchCountries(evt.target.value.trim().toLowerCase())
-      .then(resultRender)
-      .catch(catchError);
-  }
   clearMarkup();
 }
 
