@@ -43,7 +43,7 @@ function onInputChange(evt) {
           'Too many matches found. Please enter a more specific name'
         );
       } else if (array.length > 1 && array.length <= 10) {
-        Notify.info(`Hooray! We found ${array} countries.`);
+        Notify.info(`Hooray! We found ${array.length} countries.`);
         renderPrewiewMarkup(array);
       } else if (array.length === 1) {
         Notify.success(`This is exactly what you were looking for!`);
