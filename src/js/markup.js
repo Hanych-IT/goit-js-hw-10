@@ -11,7 +11,7 @@ function createMarkup({ flags, name, capital, population, languages }) {
         <h2 class="country-info__name">${name.official}</h2>
       <p class="country-info__capital"><span class="conntry-info--accent">Capital:</span> ${capital}</p>
       <p class="country-info__population"><span class="conntry-info--accent">Population:</span> ${population}</p>
-      <p class="country-info__languages"><span class="conntry-info--accent">languages:</span> ${languagesString}</p>`;
+      <p class="country-info__languages"><span class="conntry-info--accent">Languages:</span> ${languagesString}</p>`;
 }
 
 export { previewMarkup, createMarkup };
